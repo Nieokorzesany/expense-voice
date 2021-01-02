@@ -10,24 +10,20 @@ import {
   Slide,
 } from "@material-ui/core";
 import { Delete, MoneyOff } from "@material-ui/icons";
+import { ExpenseTrackerContext } from "../../../context/context";
 
 import useStyles from "./styles";
+import transitions from "@material-ui/core/styles/transitions";
 
 const List = () => {
+  const { deleteTransaction, transactions } = useContext(ExpenseTrackerContext);
+
   const classes = useStyles();
-  const transactions = [
-    {
-      id: 1,
-      type: "Income",
-      category: "Travel",
-      amount: 100,
-      date: "Mon Dec 28 2020",
-    },
-  ];
+  const transactionsList = transactions;
 
   return (
     <MUIList dense={false} className={classes.list}>
-      {transactions.map((transaction) => (
+      {transactionsList.map((transaction) => (
         <Slide
           direction="down"
           in
