@@ -25,7 +25,7 @@ const App = (props) => {
           <Main />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <Details title="Expanse" />
+          <Details title="Expense" />
         </Grid>
       </Grid>
     </div>

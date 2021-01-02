@@ -11,6 +11,11 @@ import {
 } from "@material-ui/core";
 import { v4 as uuidv4 } from "uuid";
 import { ExpenseTrackerContext } from "../../../context/context";
+import {
+  incomeCategories,
+  expenseCategories,
+} from "../../../constants/categories";
+import formatDate from "../../../utils/formatDate";
 
 import useStyles from "./styles";
 
@@ -21,7 +26,7 @@ const Form = () => {
     amount: "",
     category: "",
     type: "Income",
-    date: new Date(),
+    date: formatDate(new Date()),
   };
 
   const { addTransaction } = useContext(ExpenseTrackerContext);
@@ -38,6 +43,9 @@ const Form = () => {
     addTransaction(transaction);
     setFormData(initialState);
   };
+
+  const selectedCategories =
+    formData.type === "Income" ? incomeCategories : expenseCategories;
 
   return (
     <Grid container spacing={2}>
@@ -67,9 +75,11 @@ const Form = () => {
             onChange={(e) =>
               setFormData({ ...formData, category: e.target.value })
             }>
-            <MenuItem value="Business">Business</MenuItem>
-            <MenuItem value="Salary">Salary</MenuItem>
-            <MenuItem value="Travel">Travel</MenuItem>
+            {selectedCategories.map((c) => (
+              <MenuItem key={c.type} value={c.type}>
+                {c.type}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Grid>
@@ -90,7 +100,7 @@ const Form = () => {
           fullWidth
           value={formData.date}
           onChange={(e) =>
-            setFormData({ ...formData, date: e.target.value })
+            setFormData({ ...formData, date: formatDate(e.target.value) })
           }></TextField>
       </Grid>
       <Button
