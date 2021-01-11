@@ -3,12 +3,17 @@ import React from "react";
 import "./App.scss";
 import { Grid } from "@material-ui/core";
 import useStyles from "./styles";
-
+import {
+  PushToTalkButton,
+  PushToTalkButtonContainer,
+  ErrorPanel,
+} from "@speechly/react-ui";
 import Details from "./Components/Details/Details";
 import Main from "./Components/Main/Main";
 
 const App = (props) => {
   const classes = useStyles();
+  console.log(process.env, "test");
   return (
     <div>
       <Grid
@@ -28,6 +33,10 @@ const App = (props) => {
           <Details title="Expense" />
         </Grid>
       </Grid>
+      <PushToTalkButtonContainer>
+        <PushToTalkButton />
+        <ErrorPanel />
+      </PushToTalkButtonContainer>
     </div>
   );
 };

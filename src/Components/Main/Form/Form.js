@@ -16,6 +16,7 @@ import {
   expenseCategories,
 } from "../../../constants/categories";
 import formatDate from "../../../utils/formatDate";
+import { useSpeechContext } from "@speechly/react-client";
 
 import useStyles from "./styles";
 
@@ -32,6 +33,7 @@ const Form = () => {
   const { addTransaction } = useContext(ExpenseTrackerContext);
   const [formData, setFormData] = useState(initialState);
   const [open, setOpen] = React.useState(false);
+  const { segment } = useSpeechContext();
 
   const createTransaction = () => {
     const transaction = {
@@ -43,6 +45,36 @@ const Form = () => {
     addTransaction(transaction);
     setFormData(initialState);
   };
+
+  useEffect(() => {
+    if (segment) {
+      if (segment.intent.intent === "add_expense") {
+        setFormData({
+          ...formData,
+          type: "Expense",
+        });
+      } else if (segment.intent.intent === "add_income") {
+        setFormData({
+          ...formData,
+          type: "Income",
+        });
+      } else if (
+        segment.isFinal &&
+        segment.intent.intent === "create_transaction"
+      ) {
+        return createTransaction();
+      } else if (
+        segment.isFinal &&
+        segment.intent.intent === "cancel_transaction"
+      ) {
+        return setFormData(initialState);
+      }
+      segment.entities.forEach((e) => {
+        //console.log(e.value);
+      });
+      console.log(segment);
+    }
+  }, [segment]);
 
   const selectedCategories =
     formData.type === "Income" ? incomeCategories : expenseCategories;
